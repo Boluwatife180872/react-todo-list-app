@@ -6,10 +6,18 @@ import TodoList from "./Todo-List";
 function TodoApp() {
   // State to hold the list of todos and the input value
   // You can use useState to manage the todos and input value
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
   const [inputValue, setInputValue] = useState("");
 
+  // useEffect to load todos from localStorage when the component mounts
   useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  /*  useEffect(() => {
     const storedTodos = localStorage.getItem("todos");
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos)); // Parse and set todos from localStorage
@@ -18,7 +26,7 @@ function TodoApp() {
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+  }, [todos]); */
 
   const addTodo = () => {
     if (inputValue.trim()) {
