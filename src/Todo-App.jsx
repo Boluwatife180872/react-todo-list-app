@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TodoForm from "./Todo-Form";
 import TodoList from "./Todo-List";
@@ -8,6 +8,17 @@ function TodoApp() {
   // You can use useState to manage the todos and input value
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos)); // Parse and set todos from localStorage
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (inputValue.trim()) {
